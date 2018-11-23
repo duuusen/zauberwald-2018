@@ -10,6 +10,7 @@ void viz() { //void viz(float t, float water, float wind, float solar)
     translate(width/2, height/2);
     rotate(radians(angle));
     line(0, 0, lineSize, lineSize);
+    // Test
     // if(blasen) {
     //   stroke(255, 255, 0,random(80,150));
     //   float blasenData = random(90,150);
