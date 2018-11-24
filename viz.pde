@@ -1,7 +1,7 @@
 void viz() { //void viz(float t, float water, float wind, float solar)
-  float data = table.getFloat(row,0);
+  float data = table.getFloat(row,"total_energy");
   println(data);
-  float newSize = map(data,0,3428530.426154,0,650);
+  float newSize = map(data,0,2492414.623,0,400);
   lineSize = newSize;
   strokeWeight(1.5);
   noFill();

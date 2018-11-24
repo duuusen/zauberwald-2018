@@ -5,7 +5,7 @@
 //   }
 // }
 void load() {
-  table = loadTable("productionTable.csv", "header,csv");
+  table = loadTable("data_master.csv", "header,csv");
 
   // for (TableRow row : table.rows()) {
   //   int data = row.getInt(0);
