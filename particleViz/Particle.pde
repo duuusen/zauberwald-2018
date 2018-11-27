@@ -1,40 +1,39 @@
 class Particle {
-  final static float BOUNCE = -0.5;
-  final static float MAX_SPEED = 0.1;
+  final static float bounce = -0.5;
+  final static float maxSpeed = 0.1;
 
-  PVector vel = new PVector(random(-MAX_SPEED, MAX_SPEED), random(-MAX_SPEED, MAX_SPEED));
-  PVector acc = new PVector(0, 0);
-  PVector pos;
+  PVector velocity = new PVector(random(-maxSpeed, maxSpeed), random(-maxSpeed, maxSpeed));
+  PVector acceleration = new PVector(0, 0);
+  PVector location;
 
-  float mass = random(2, 2.5);
-  float size = random(0.1, 2.0);
-  float r, g, b;
+  float mass = random(1, 3);
+  float size = random(5, 15);
   int lifespan = 300;
 
   Particle(PVector p) {
-    pos = new PVector (p.x, p.y);
-    acc = new PVector (random(0.1, 1.5), 0);
-    r = random (100, 255);
-    g = random (0, 50);
-    b = 0;
+    location = new PVector (p.x, p.y);
+    acceleration = new PVector (random(0.1, 1.5), 0);
+    // r = random (100, 255);
+    // g = random (0, 50);
+    // b = 0;
   }
 
   void move() {
-    vel.add(acc); // Apply acceleration
-    pos.add(vel); // Apply our speed vector
-    acc.mult(0);
-
+    velocity.add(acceleration);
+    location.add(velocity);
+    acceleration.mult(0); // resettting the acceleration, because otherwise it would add up. Does also work with set(0,0,0);
+    lifespan -= 1.0; // countdown, has to be a float because the lifespan is also a float
     size += 0.01; //0.015
-    lifespan--;
   }
   void applyForce(PVector force) {
-    PVector f = PVector.div(force, mass);
-    acc.add(f);
+    PVector f = force.get(); // we have to make a copy of the PVector before altering it by division or ellipse
+    f.div(mass); // this gives us A
+    acceleration.add(f); // A is then added to the vector to calculate the acceleration
   }
   void display() {
-    // Colour based on x and y velocity
+    // Colour based on x and y velocityocity
     fill(255,255,255);
-    ellipse(pos.x, pos.y, size * 4, size * 4);
+    ellipse(location.x, location.y, size, size);
   }
 
   boolean isDead() {

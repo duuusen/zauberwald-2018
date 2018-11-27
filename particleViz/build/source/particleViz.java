@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class particle_test_1 extends PApplet {
+public class particleViz extends PApplet {
 
 
 // ArrayList<Data> data = new ArrayList<Data>();
@@ -51,42 +51,41 @@ public void draw() {
   }
 }
 class Particle {
-  final static float BOUNCE = -0.5f;
-  final static float MAX_SPEED = 0.1f;
+  final static float bounce = -0.5f;
+  final static float maxSpeed = 0.1f;
 
-  PVector vel = new PVector(random(-MAX_SPEED, MAX_SPEED), random(-MAX_SPEED, MAX_SPEED));
-  PVector acc = new PVector(0, 0);
-  PVector pos;
+  PVector velocity = new PVector(random(-maxSpeed, maxSpeed), random(-maxSpeed, maxSpeed));
+  PVector acceleration = new PVector(0, 0);
+  PVector location;
 
-  float mass = random(2, 2.5f);
-  float size = random(0.1f, 2.0f);
-  float r, g, b;
+  float mass = random(1, 3);
+  float size = random(5, 15);
   int lifespan = 300;
 
   Particle(PVector p) {
-    pos = new PVector (p.x, p.y);
-    acc = new PVector (random(0.1f, 1.5f), 0);
-    r = random (100, 255);
-    g = random (0, 50);
-    b = 0;
+    location = new PVector (p.x, p.y);
+    acceleration = new PVector (random(0.1f, 1.5f), 0);
+    // r = random (100, 255);
+    // g = random (0, 50);
+    // b = 0;
   }
 
   public void move() {
-    vel.add(acc); // Apply acceleration
-    pos.add(vel); // Apply our speed vector
-    acc.mult(0);
-
+    velocity.add(acceleration);
+    location.add(velocity);
+    acceleration.mult(0); // resettting the acceleration, because otherwise it would add up. Does also work with set(0,0,0);
+    lifespan -= 1.0f; // countdown, has to be a float because the lifespan is also a float
     size += 0.01f; //0.015
-    lifespan--;
   }
   public void applyForce(PVector force) {
-    PVector f = PVector.div(force, mass);
-    acc.add(f);
+    PVector f = force.get(); // we have to make a copy of the PVector before altering it by division or ellipse
+    f.div(mass); // this gives us A
+    acceleration.add(f); // A is then added to the vector to calculate the acceleration
   }
   public void display() {
-    // Colour based on x and y velocity
+    // Colour based on x and y velocityocity
     fill(255,255,255);
-    ellipse(pos.x, pos.y, size * 4, size * 4);
+    ellipse(location.x, location.y, size, size);
   }
 
   public boolean isDead() {
@@ -104,11 +103,10 @@ class ParticleSystem {
     Iterator<Particle> i = particles.iterator();
     while (i.hasNext()) {
       Particle p = i.next();
-      // remove particles
-      if (p.pos.x > width || p.pos.x < 0) {
+      if (p.location.x > width || p.location.x < 0) {
         i.remove();
         continue;
-      } else if (p.pos.y > height || p.pos.y < 0) {
+      } else if (p.location.y > height || p.location.y < 0) {
         i.remove();
         continue;
       }
@@ -132,7 +130,7 @@ class Solar extends Particle {
   // We inherite update() from parent class
   public void display() { // Overwrites the display method
     fill(255,0,255);
-    ellipse(pos.x, pos.y, size * 4, size * 4);
+    ellipse(location.x, location.y, size, size);
   }
 }
 public void viz() {
@@ -168,7 +166,7 @@ class Water extends Particle {
   // We inherite update() from parent class
   public void display() { // Overwrites the display method
     fill(0,255,255);
-    ellipse(pos.x, pos.y, size * 4, size * 4);
+    ellipse(location.x, location.y, size, size);
   }
 }
 class Wind extends Particle {
@@ -179,12 +177,12 @@ class Wind extends Particle {
   // We inherite update() from parent class
   public void display() { // Overwrites the display method
     fill(255,255,0);
-    ellipse(pos.x, pos.y, size * 4, size * 4);
+    ellipse(location.x, location.y, size * 4, size * 4);
   }
 }
   public void settings() {  size(1050, 1050, P3D);  smooth(); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "particle_test_1" };
+    String[] appletArgs = new String[] { "particleViz" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
