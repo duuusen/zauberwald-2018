@@ -1,4 +1,4 @@
-// ArrayList<Data> data = new ArrayList<Data>();
+ArrayList<Data> data = new ArrayList<Data>();
 Table table;
 
 PGraphics vizMask;

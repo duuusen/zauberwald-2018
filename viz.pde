@@ -8,30 +8,14 @@ void viz() { //void viz(float t, float water, float wind, float solar)
   stroke(80,80,80);
   pushMatrix();
     translate(width/2, height/2);
-    rotate(radians(angle));
-    line(0, 0, lineSize, lineSize);
-    // if(blasen) {
-    //   stroke(255, 255, 0,random(80,150));
-    //   float blasenData = random(90,150);
-    //   line(0,0,blasenData,blasenData);
-    // }
-    // if(wasser) {
-    //   stroke(0, 255, 255,random(80,150));
-    //   float blasenData = random(90,150);
-    //   line(0,0,blasenData,blasenData);
-    // }
-    // if(solar) {
-    //   stroke(255, 0, 255,random(80,150));
-    //   float blasenData = random(90,150);
-    //   line(0,0,blasenData,blasenData);
-    // }
-    // if (lineModule != null) {
-    //   shape(lineModule, 0, 0, lineSize, lineSize);
-    // }
-    // else {
-    //   line(0, 0, lineSize, lineSize);
-    // }
-    angle = angle + angleSpeed;
+    beginShape();
+    for(int i = 0; i < 100; i++) {
+      float radius = 300 + random(50);
+      float x = cos(radians(i * 3.6)) * radius;
+      float y = sin(radians(i * 3.6)) * radius;
+      vertex(x, y);
+    }
+endShape(CLOSE);
   popMatrix();
   row++;
 }

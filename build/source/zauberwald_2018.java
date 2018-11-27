@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class zauberwald_2018 extends PApplet {
 
-// ArrayList<Data> data = new ArrayList<Data>();
+ArrayList<Data> data = new ArrayList<Data>();
 Table table;
 
 PGraphics vizMask;
@@ -59,20 +59,29 @@ public void draw() {
     t = 0;
   }
 }
-// class Data {
-//   int data;
-//   Data(int d) {
-//     data = d;
-//   }
-// }
+class Data {
+  float total_energy;
+  float sun;
+  float rain;
+  float wind;
+  Data(float e,float s,float r,float w) {
+    total_energy = e;
+    sun = s;
+    rain = r;
+    wind = w;
+  }
+}
 public void load() {
   table = loadTable("data_master.csv", "header,csv");
 
-  // for (TableRow row : table.rows()) {
-  //   int data = row.getInt(0);
-  //   Data d = new Data(data); // adding whole objects to the arraylist, why not
-  //   data.add(d);
-  // }
+  for (TableRow row : table.rows()) {
+    float total_energy = row.getFloat("total_energy");
+    float sun = row.getFloat("sun");
+    float rain = row.getFloat("rain");
+    float wind = row.getFloat("wind");
+    Data d = new Data(total_energy,sun,rain,wind); // adding whole objects to the arraylist, why not
+    data.add(d);
+  }
 }
 public void viz() { //void viz(float t, float water, float wind, float solar)
   float data = table.getFloat(row,"total_energy");
@@ -84,30 +93,14 @@ public void viz() { //void viz(float t, float water, float wind, float solar)
   stroke(80,80,80);
   pushMatrix();
     translate(width/2, height/2);
-    rotate(radians(angle));
-    line(0, 0, lineSize, lineSize);
-    // if(blasen) {
-    //   stroke(255, 255, 0,random(80,150));
-    //   float blasenData = random(90,150);
-    //   line(0,0,blasenData,blasenData);
-    // }
-    // if(wasser) {
-    //   stroke(0, 255, 255,random(80,150));
-    //   float blasenData = random(90,150);
-    //   line(0,0,blasenData,blasenData);
-    // }
-    // if(solar) {
-    //   stroke(255, 0, 255,random(80,150));
-    //   float blasenData = random(90,150);
-    //   line(0,0,blasenData,blasenData);
-    // }
-    // if (lineModule != null) {
-    //   shape(lineModule, 0, 0, lineSize, lineSize);
-    // }
-    // else {
-    //   line(0, 0, lineSize, lineSize);
-    // }
-    angle = angle + angleSpeed;
+    beginShape();
+    for(int i = 0; i < 100; i++) {
+      float radius = 300 + random(50);
+      float x = cos(radians(i * 3.6f)) * radius;
+      float y = sin(radians(i * 3.6f)) * radius;
+      vertex(x, y);
+    }
+endShape(CLOSE);
   popMatrix();
   row++;
 }
