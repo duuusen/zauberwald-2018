@@ -51,7 +51,6 @@ public void draw() {
   }
 }
 class Particle {
-  final static float bounce = -0.5f;
   final static float maxSpeed = 0.1f;
 
   PVector velocity = new PVector(random(-maxSpeed, maxSpeed), random(-maxSpeed, maxSpeed));
@@ -177,7 +176,7 @@ class Wind extends Particle {
   // We inherite update() from parent class
   public void display() { // Overwrites the display method
     fill(255,255,0);
-    ellipse(location.x, location.y, size * 4, size * 4);
+    ellipse(location.x, location.y, size, size);
   }
 }
   public void settings() {  size(1050, 1050, P3D);  smooth(); }

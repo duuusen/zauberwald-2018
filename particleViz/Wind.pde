@@ -6,6 +6,6 @@ class Wind extends Particle {
   // We inherite update() from parent class
   void display() { // Overwrites the display method
     fill(255,255,0);
-    ellipse(location.x, location.y, size * 4, size * 4);
+    ellipse(location.x, location.y, size, size);
   }
 }

@@ -1,5 +1,4 @@
 class Particle {
-  final static float bounce = -0.5;
   final static float maxSpeed = 0.1;
 
   PVector velocity = new PVector(random(-maxSpeed, maxSpeed), random(-maxSpeed, maxSpeed));
