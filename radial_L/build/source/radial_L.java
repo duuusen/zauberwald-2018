@@ -28,7 +28,6 @@ float water = 0;
 float wind = 0;
 float solar = 0;
 float t = 0;
-
 int row = 0;
 
 public void setup() {
@@ -42,14 +41,12 @@ public void setup() {
 
   cConsumption=new Clock("consumption", color(255), color(200), 2500000); //eigentlich 3000000
   cWind=new Clock("wind", color(255, 0, 255, 200), color(255, 0, 255), 36);
-  cSun=new Clock("sun", color(255, 255, 0, 200), color(255, 255, 0), 80);
+  cSun=new Clock("sun", color(255, 255, 0, 200), color(255, 255, 0), 120);
   cRain=new Clock("rainfall", color(0, 255, 255, 200), color(0, 255, 255), 2);
 
   rwind.addRingOutside();
   rwater.addRingOutside();
   rsolar.addRingOutside();
-  fill(0);
-  ellipse(width/2,height/2,100,100);
 }
 
 public void draw() {
@@ -63,14 +60,14 @@ public void draw() {
   rwind.paint();
   rwater.paint();
   fill(0);
-  ellipse(width/2,height/2,200,200);
+  noStroke();
+  ellipse(width/2,height/2,250,250);
   if (t > 1) {
     t = 0;
   }
 }
 class Rings {
   int ringCount = 0;
-
   float minRadius = 0.0f;
   float ringDistance = 20.0f;
   float amplitude = 0.4f;
@@ -82,7 +79,6 @@ class Rings {
     this.minRadius = radius;
     this.seed = random(0, 1000000);
   }
-
   public void addRingInside() {
     if(minRadius - ringDistance < 0) {
       return;
@@ -90,11 +86,9 @@ class Rings {
     minRadius -= ringDistance;
     ringCount++;
   }
-
   public void addRingOutside() {
     ringCount++;
   }
-
   public void removeRingInside() {
     if(ringCount <= 0) {
       return;
@@ -103,35 +97,28 @@ class Rings {
     // Kleinster Ring wurde entfernt: neuer kleinster Ring ist da wo zuvor der zweitkleinste lag (minRadius + ringDistance)
     minRadius += ringDistance;
   }
-
   public void removeRingOutside() {
     ringCount--;
     if(ringCount < 0) {
       ringCount = 0;
     }
   }
-
   public void paint() {
     stroke(ringColor);
-    strokeWeight(3);//1.5
+    strokeWeight(3);
     noFill();
-    //blendMode(ADD);
-
     for(int i = 0; i<ringCount; i++) {
       paintRing(i);
     }
   }
-
   public void paintRing(int i) {
     float radius = (minRadius + (i * ringDistance))/2;
-
     float variance = amplitude * radius;
     float min = radius - variance;
     float max = radius + variance;
 
     pushMatrix();
     translate(width/2, height/2);
-
     beginShape();
     for (float angle = 0; angle < 360; angle += 0.8f) {
       float theta = radians(angle);
@@ -142,11 +129,8 @@ class Rings {
       vertex(x*r1, y*r1);
     }
     endShape(CLOSE);
-
     popMatrix();
-
   }
-
 }
 // class Data {
 //   int data;
