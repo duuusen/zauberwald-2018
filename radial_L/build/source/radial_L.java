@@ -12,16 +12,14 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class radialArea extends PApplet {
+public class radial_L extends PApplet {
 
 // ArrayList<Data> data = new ArrayList<Data>();
 Table table;
-Rings rwind = new Rings(color(142, 250, 0), 130);
-Rings rwater = new Rings(color(0, 150, 255), 130);
-Rings rsolar = new Rings(color(252, 241, 30), 130);
+Rings rwind = new Rings(color(255, 0, 255), 130);
+Rings rwater = new Rings(color(0, 255, 255), 130);
+Rings rsolar = new Rings(color(255, 255, 0), 130);
 
-PGraphics vizMask;
-PGraphics ellipseMask;
 Clock cConsumption;
 Clock cSun;
 Clock cWind;
@@ -39,17 +37,6 @@ public void setup() {
   frameRate(60);
   
   noCursor();
-
-  vizMask = createGraphics(width, height);
-  vizMask.beginDraw();
-  vizMask.background(0);
-  vizMask.ellipse(width/2, height/2, height, height);
-  vizMask.endDraw();
-  ellipseMask = createGraphics(200,200);
-  ellipseMask.beginDraw();
-  ellipseMask.background(255,0,255);
-  ellipseMask.ellipse(width/2,height/2,400,400);
-  ellipseMask.endDraw();
 
   load();
 
@@ -69,20 +56,14 @@ public void draw() {
   t += 0.2f / 60.0f / 5.0f;
   background(0);
   cConsumption.display();
-  // cSun.display();
-  // cWind.display();
-  // cRain.display();
-
+  cSun.display();
+   cWind.display();
+  cRain.display();
   rsolar.paint();
   rwind.paint();
   rwater.paint();
-  PImage i = get();
-  i.mask(vizMask);
-
-  background(0);
-  image(i, 0, 0, width, height);
-
-  // reset time
+  fill(0);
+  ellipse(width/2,height/2,200,200);
   if (t > 1) {
     t = 0;
   }
@@ -99,7 +80,7 @@ class Rings {
   Rings(int ringColor, float radius) {
     this.ringColor = ringColor;
     this.minRadius = radius;
-    seed = random(0, 1000000);
+    this.seed = random(0, 1000000);
   }
 
   public void addRingInside() {
@@ -134,7 +115,7 @@ class Rings {
     stroke(ringColor);
     strokeWeight(3);//1.5
     noFill();
-    blendMode(ADD);
+    //blendMode(ADD);
 
     for(int i = 0; i<ringCount; i++) {
       paintRing(i);
@@ -192,6 +173,7 @@ class Clock { //void viz(float t, float water, float wind, float solar)
   float angle = 0;
   float angleSpeed = 2.2f;
   float lineSize;
+
   Clock(String cName, int fill, int stroke, float mapper) {
     list = new ArrayList<PVector>();
     for (int i=0; i<table.getRowCount(); i++) {
@@ -209,11 +191,12 @@ class Clock { //void viz(float t, float water, float wind, float solar)
 
   public void display() {
     beginShape();
+    noStroke();
     curveVertex(width/2, height/2);
     curveVertex(width/2, height/2);
     for (int i= counterArray; i<counter; i++) {
-      stroke(255);
-      noFill();
+      //stroke(255);
+      fill(Fill);
       curveVertex(list.get(i).x, list.get(i).y);
     }
     endShape();
@@ -227,9 +210,9 @@ class Clock { //void viz(float t, float water, float wind, float solar)
     }
   }
 }
-  public void settings() {  size(800, 800, P3D);  smooth(); }
+  public void settings() {  size(800, 800,P3D);  smooth(); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "radialArea" };
+    String[] appletArgs = new String[] { "radial_L" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
