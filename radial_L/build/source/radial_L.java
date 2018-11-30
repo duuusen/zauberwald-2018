@@ -16,37 +16,39 @@ public class radial_L extends PApplet {
 
 // ArrayList<Data> data = new ArrayList<Data>();
 Table table;
-Rings rwind = new Rings(color(255, 0, 255), 130);
-Rings rwater = new Rings(color(0, 255, 255), 130);
-Rings rsolar = new Rings(color(255, 255, 0), 130);
-
+Rings ringWind;
+Rings ringRain;
+Rings ringSun;
 Clock cConsumption;
 Clock cSun;
 Clock cWind;
 Clock cRain;
+
 float water = 0;
 float wind = 0;
 float solar = 0;
 float t = 0;
-int row = 0;
+
+float maxValWind = 3565;
+float maxValRain = 6.6f;
+float maxValSun = 59.5f;
 
 public void setup() {
   
-  //size(1050, 1050, P3D);
-  frameRate(60);
   
   noCursor();
-
   load();
-
   cConsumption=new Clock("consumption", color(255), color(200), 2500000); //eigentlich 3000000
-  cWind=new Clock("wind", color(255, 0, 255, 200), color(255, 0, 255), 36);
-  cSun=new Clock("sun", color(255, 255, 0, 200), color(255, 255, 0), 120);
-  cRain=new Clock("rainfall", color(0, 255, 255, 200), color(0, 255, 255), 2);
+  cWind=new Clock("wind", color(255, 0, 255, 200), color(255, 0, 255), 45);
+  cSun=new Clock("sun", color(255, 255, 0, 200), color(255, 255, 0), 150);
+  cRain=new Clock("rainfall", color(0, 255, 255, 200), color(0, 255, 255), 10);
+  ringWind = new Rings("wind", color(255, 0, 255), 160, 3565);
+  ringRain = new Rings("rainfall", color(0, 255, 255), 160, 59.5f);
+  ringSun = new Rings("sun", color(255, 255, 0), 160, 6.6f);
 
-  rwind.addRingOutside();
-  rwater.addRingOutside();
-  rsolar.addRingOutside();
+  ringWind.addRingOutside();
+  ringRain.addRingOutside();
+  ringSun.addRingOutside();
 }
 
 public void draw() {
@@ -56,9 +58,9 @@ public void draw() {
   cSun.display();
    cWind.display();
   cRain.display();
-  rsolar.paint();
-  rwind.paint();
-  rwater.paint();
+  ringSun.paint();
+  ringWind.paint();
+  ringRain.paint();
   fill(0);
   noStroke();
   ellipse(width/2,height/2,250,250);
@@ -74,10 +76,17 @@ class Rings {
   int ringColor;
   float seed;
 
-  Rings(int ringColor, float radius) {
+  Rings(String rName, int ringColor, float radius, float mapper) {
     this.ringColor = ringColor;
     this.minRadius = radius;
     this.seed = random(0, 1000000);
+    for (int i=0; i<table.getRowCount(); i++) {
+      float data = table.getFloat(i, rName);
+      float dataMapped = map(data, 0, mapper, 0, 150); // this maps rain and sun proportionally to the wind Data
+      // float ampMapped = map(mapPropRainSun,0,3565,0,100);
+      amplitude = dataMapped;
+      println(rName + dataMapped);
+    }
   }
   public void addRingInside() {
     if(minRadius - ringDistance < 0) {
@@ -132,24 +141,31 @@ class Rings {
     popMatrix();
   }
 }
-// class Data {
-//   int data;
-//   Data(int d) {
-//     data = d;
-//   }
-// }
+class WeatherData {
+  float sun;
+  float rain;
+  float wind;
+
+  WeatherData(float sun, float rain, float wind) {
+    this.rain = rain;
+    this.sun = sun;
+    this.wind = wind;
+  }
+}
+ArrayList<WeatherData> weatherData;
 public void load() {
   table = loadTable("all_data_2017.csv", "header,csv");
-
-  // for (TableRow row : table.rows()) {
-  //   int data = row.getInt(0);
-  //   Data d = new Data(data); // adding whole objects to the arraylist, why not
-  //   data.add(d);
-  // }
+  weatherData = new ArrayList<WeatherData>();
+    for (TableRow row : table.rows()) {
+      float rain = row.getFloat("rainfall");
+      float sun = row.getFloat("sun");
+      float wind = row.getFloat("wind");
+      WeatherData wd = new WeatherData(rain,sun,wind);
+      weatherData.add(wd);
+    }
 }
 class Clock { //void viz(float t, float water, float wind, float solar)
   ArrayList<PVector> list;
-  float data = table.getFloat(row, 0);
   int counter=0;
   int counterArray= 0;
   int Fill;

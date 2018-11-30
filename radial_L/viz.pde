@@ -1,6 +1,5 @@
 class Clock { //void viz(float t, float water, float wind, float solar)
   ArrayList<PVector> list;
-  float data = table.getFloat(row, 0);
   int counter=0;
   int counterArray= 0;
   color Fill;

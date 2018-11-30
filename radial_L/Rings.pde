@@ -6,10 +6,17 @@ class Rings {
   color ringColor;
   float seed;
 
-  Rings(color ringColor, float radius) {
+  Rings(String rName, color ringColor, float radius, float mapper) {
     this.ringColor = ringColor;
     this.minRadius = radius;
     this.seed = random(0, 1000000);
+    for (int i=0; i<table.getRowCount(); i++) {
+      float data = table.getFloat(i, rName);
+      float dataMapped = map(data, 0, mapper, 0, 150); // this maps rain and sun proportionally to the wind Data
+      // float ampMapped = map(mapPropRainSun,0,3565,0,100);
+      amplitude = dataMapped;
+      println(rName + dataMapped);
+    }
   }
   void addRingInside() {
     if(minRadius - ringDistance < 0) {

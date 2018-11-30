@@ -1,15 +1,23 @@
-// class Data {
-//   int data;
-//   Data(int d) {
-//     data = d;
-//   }
-// }
+class WeatherData {
+  float sun;
+  float rain;
+  float wind;
+
+  WeatherData(float sun, float rain, float wind) {
+    this.rain = rain;
+    this.sun = sun;
+    this.wind = wind;
+  }
+}
+ArrayList<WeatherData> weatherData;
 void load() {
   table = loadTable("all_data_2017.csv", "header,csv");
-
-  // for (TableRow row : table.rows()) {
-  //   int data = row.getInt(0);
-  //   Data d = new Data(data); // adding whole objects to the arraylist, why not
-  //   data.add(d);
-  // }
+  weatherData = new ArrayList<WeatherData>();
+    for (TableRow row : table.rows()) {
+      float rain = row.getFloat("rainfall");
+      float sun = row.getFloat("sun");
+      float wind = row.getFloat("wind");
+      WeatherData wd = new WeatherData(rain,sun,wind);
+      weatherData.add(wd);
+    }
 }
