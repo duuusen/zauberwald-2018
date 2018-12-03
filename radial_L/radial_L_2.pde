@@ -16,16 +16,16 @@ float t = 0;
 float maxValWind = 3565;
 float maxValRain = 6.6;
 float maxValSun = 59.5;
-
+boolean animate=false;
 void setup() {
-  size(800, 800,P3D);
+  size(800, 800, P3D);
   smooth();
   noCursor();
   load();
   cConsumption=new Clock("consumption", color(255), color(200), 2500000); //eigentlich 3000000
   cWind=new Clock("wind", color(255, 0, 255, 200), color(255, 0, 255), 45);
   cSun=new Clock("sun", color(255, 255, 0, 200), color(255, 255, 0), 150);
-  cRain=new Clock("rainfall", color(0, 255, 255, 200), color(0, 255, 255), 10);
+  cRain=new Clock("rainfall", color(0, 255, 255, 200), color(0, 255, 255), 60);
   ringWind = new Rings("wind", color(255, 0, 255), 160, 3565);
   ringRain = new Rings("rainfall", color(0, 255, 255), 160, 59.5);
   ringSun = new Rings("sun", color(255, 255, 0), 160, 6.6);
@@ -39,27 +39,22 @@ void draw() {
   t += 0.2 / 60.0 / 5.0;
   background(0);
   cConsumption.display();
-  keyPressed();
-  ringSun.paint();
+  cSun.display();
+  cWind.display();
+  cRain.display();
+
   ringWind.paint();
   ringRain.paint();
+  ringSun.paint();
   fill(0);
   noStroke();
-  ellipse(width/2,height/2,250,250);
+  ellipse(width/2, height/2, 250, 250);
   if (t > 1) {
     t = 0;
   }
-}
-void keyPressed() {
-  switch(key) {
-  case 'q':
-    cSun.display();
-    break;
-  case 'w':
-    cWind.display();
-    break;
-  case 'e':
-    cRain.display();
-    break;
+  if (keyPressed) {
+    animate=true;
+  } else {
+    animate=false;
   }
 }

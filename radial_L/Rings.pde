@@ -5,17 +5,26 @@ class Rings {
   float amplitude = 0.4;
   color ringColor;
   float seed;
-
+  float list[]=new float[8000];
+  int index=0;
   Rings(String rName, color ringColor, float radius, float mapper) {
     this.ringColor = ringColor;
     this.minRadius = radius;
     this.seed = random(0, 1000000);
+    //list[]=new float[table.getRowCount()];
     for (int i=0; i<table.getRowCount(); i++) {
       float data = table.getFloat(i, rName);
-      float dataMapped = map(data, 0, mapper, 0, 150); // this maps rain and sun proportionally to the wind Data
+      //float dataMapped = map(data, 0, mapper, 100, 20); // this maps rain and sun proportionally to the wind Data
       // float ampMapped = map(mapPropRainSun,0,3565,0,100);
-      amplitude = dataMapped;
-      println(rName + dataMapped);
+      //amplitude = dataMapped;
+      if(i<8000){
+        //if(data==0){data=100;}
+        
+        if(rName=="rainfall"){data=5/data+30;}
+        else if(rName=="wind"){data=140/data+30;}
+        else{data=40/data+30;}
+      list[i]=data;}
+      //println(rName + dataMapped);
     }
   }
   void addRingInside() {
@@ -55,16 +64,19 @@ class Rings {
     float variance = amplitude * radius;
     float min = radius - variance;
     float max = radius + variance;
-
+    if(index<8000-1){index++; println("wwww");}
+    int index2=index;
     pushMatrix();
     translate(width/2, height/2);
     beginShape();
-    for (float angle = 0; angle < 360; angle += 0.8) {
+    for (float angle = 360; angle >0; angle -= 0.8) {
       float theta = radians(angle);
       float x = cos(theta);
       float y = sin(theta);
-      float r1 = noise(theta, (frameCount+seed)*0.06);
-      r1 = map(r1, 0, 1, min, max);
+      //float r1 = noise(theta, (frameCount+seed)*0.06);
+      //r1 = map(r1, 0, 1, min, max);
+      float r1=list[index2]+random(-20,20);
+      if(index<8000-1){index2++;}
       vertex(x*r1, y*r1);
     }
     endShape(CLOSE);
